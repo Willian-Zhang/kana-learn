@@ -89,12 +89,7 @@
 					return -1;
 				}
 				var nRandom = Math.floor(Math.random() * this[kanaSet].length);
-				if(!this.tested.includes(nRandom)){
-					this.tested.push(nRandom);
-					return nRandom + '';
-				} else{
-					return this.randomIndex();
-				}
+				return nRandom + '';
 			},
 			renderView: function(){
 				var key = Math.floor(Math.random() * 2) == 0 ? 'hiragana' : 'katakana';
@@ -104,14 +99,13 @@
 					return;
 				}
 
+				this[key].splice(index, 1);
 				var anthor = key == "hiragana" ? 'katakana' : 'hiragana';
 				this.hideMore();
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
-				this.oBtn_change.text("Next ("+kanaLeft()+")");
-
-				this[key].splice(index, 1);
+				this.oBtn_change.text("Next ("+kanaLeft()+")");			
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
