@@ -71,10 +71,15 @@
 			},
 			initEvent: function(){
 				
-				if(isIOS) var eventType = 'touchstart';
-				else var eventType = 'click';
-				this.oView.addEventListener(eventType,this.showMore.bind(this),false);
-				this.oBtn_change.addEventListener(eventType,this.renderView.bind(this),false);
+				if(isIOS){
+					this.oView.addEventListener('touchstart',this.showMore.bind(this),false);
+					this.oView.addEventListener('touchend',this.hideMore.bind(this),false);
+					this.oBtn_change.addEventListener('touchend',this.renderView.bind(this),false);
+				}else{
+					this.oView.addEventListener('click',this.showMore.bind(this),false);
+					this.oBtn_change.addEventListener('click',this.renderView.bind(this),false);
+				} 
+				
 			},
 			randomIndex: function(){
 				var nRandom = Math.floor(Math.random() * this.hiragana.length);
