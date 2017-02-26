@@ -83,7 +83,7 @@
 				
 			},
 			randomIndex: function(){
-				if(nRandom.length >= this.hiragana.length){
+				if(this.tested.length >= this.hiragana.length){
 					return -1;
 				}
 				var nRandom = Math.floor(Math.random() * this.hiragana.length);
@@ -106,7 +106,7 @@
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
-				this.oBtn_change.text("Next ("+this.hiragana.length+")")
+				this.oBtn_change.text("Next ("+(this.hiragana.length - this.tested.length)+")")
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
