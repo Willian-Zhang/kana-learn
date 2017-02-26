@@ -112,7 +112,7 @@
 				this.hideMore();
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
-				this.oVowel.innerHTML = this.vowel[index];
+				this.oVowel.innerHTML = this[key+"_vowel"][index];
 				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
 			},
 			renderNothing: function(){
