@@ -105,14 +105,15 @@
 					return;
 				}
 
+				this.hideMore();
+				this.oView_main.innerHTML = this[key][index];
+				this.oView_anthor.innerHTML = this[key+"_"+anthor][index];
+				this.oVowel.innerHTML = this[key+"_vowel"][index];
+
 				this[key].splice(index, 1);
 				this[key+"_"+anthor].splice(index, 1);
 				this[key+"_vowel"].splice(index, 1);
 
-				this.hideMore();
-				this.oView_main.innerHTML = this[key][index];
-				this.oView_anthor.innerHTML = this[anthor][index];
-				this.oVowel.innerHTML = this[key+"_vowel"][index];
 				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
 			},
 			renderNothing: function(){
