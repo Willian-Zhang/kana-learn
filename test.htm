@@ -59,7 +59,6 @@
 				this.katakana = ["ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ず", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ぺ", "ポ"];
 				this.vowel = ['a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so','ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho','ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','o','n', "ga", "gi", "gu", "ge", "go", "za", "ji", "zu", "ze", "zo", "da", "ji", "zu", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po"];
 				this.now = -1;
-				this.tested = [];
 
 				this.oView = $('.view');
 				this.oView_main = $('.view-main');
@@ -82,11 +81,14 @@
 				} 
 				
 			},
-			randomIndex: function(){
-				if(this.tested.length >= this.hiragana.length){
+			kanaLeft: function(){
+				return this.hiragana.length + this.katakana.length
+			},
+			randomIndex: function(kanaSet){
+				if(this.kanaLeft() == 0){
 					return -1;
 				}
-				var nRandom = Math.floor(Math.random() * this.hiragana.length);
+				var nRandom = Math.floor(Math.random() * this[kanaSet].length);
 				if(!this.tested.includes(nRandom)){
 					this.tested.push(nRandom);
 					return nRandom + '';
@@ -95,25 +97,28 @@
 				}
 			},
 			renderView: function(){
-				var index = this.randomIndex();
+				var key = Math.floor(Math.random() * 2) == 0 ? 'hiragana' : 'katakana';
+				var index = this.randomIndex(key);
 				if(index < 0){
 					this.renderNothing();
 					return;
 				}
-				var key = Math.floor(Math.random() * 2) == 0 ? 'hiragana' : 'katakana';
+
 				var anthor = key == "hiragana" ? 'katakana' : 'hiragana';
 				this.hideMore();
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
-				this.oBtn_change.text("Next ("+(this.hiragana.length - this.tested.length)+")")
+				this.oBtn_change.text("Next ("+kanaLeft()+")");
+
+				this[key].splice(index, 1);
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
 				this.oView_anthor.innerHTML = "";
 				this.oVowel.innerHTML = "";
-				this.oBtn_change.text("Nothing Left")
-				this.oBtn_change.disable()
+				this.oBtn_change.text("Nothing Left");
+				this.oBtn_change.disable();
 			},
 			showMore: function(){
 				this.oView_anthor.classList.remove('hide');
