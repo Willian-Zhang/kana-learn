@@ -106,11 +106,13 @@
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
+				this.oBtn_change.text(`Next (${this.hiragana.length})`)
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
 				this.oView_anthor.innerHTML = "";
 				this.oVowel.innerHTML = "";
+				this.oBtn_change.text(`Nothing Left`)
 				this.oBtn_change.disable()
 			},
 			showMore: function(){
