@@ -38,6 +38,8 @@
 	.view-vowel{right:0;bottom:0;}
 	.btn{border:0;}
 	.btn-change{display:block;width: 5.76rem;height:1.26rem;margin: 0 auto;padding:0;font:bold .4rem 'arial';color:#fff;border-radius: 3px;background:#33AC8E;}
+	.back{background: #1e1e1e}
+	.btn-change:disabled{background: gray}
 	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
 	</style>
 </head>
@@ -49,6 +51,7 @@
 			<div class="view-vowel hide"></div>
 		</div>
 		<button class="btn btn-change">Next</button>
+		<button class="btn btn-change back">back</button>
 	</div>
 	<p class="footer">Powered by BevisZheng, WillianZ</p>
 	<script type="text/javascript">
@@ -75,6 +78,7 @@
 				this.oView_anthor = $('.view-anthor');
 				this.oVowel = $('.view-vowel');
 				this.oBtn_change = $('.btn-change');
+				this.oBtn_back = $('.back');
 
 				this.initEvent();
 				this.renderView();
@@ -83,12 +87,12 @@
 				if(isIOS){
 					this.oView.addEventListener('touchstart',this.showMore.bind(this),false);
 					this.oView.addEventListener('touchend',this.hideMore.bind(this),false);
-					this.oBtn_change.addEventListener('touchend',this.renderView.bind(this),false);
 				}else{
 					this.oView.addEventListener('click',this.showMore.bind(this),false);
-					this.oBtn_change.addEventListener('click',this.renderView.bind(this),false);
 				} 
-				
+				event = isIOS ? 'touchend' : 'click';
+				this.oBtn_change.addEventListener(event,this.renderView.bind(this),false);
+				this.oBtn_back.addEventListener(event,this.back.bind(this),false);
 			},
 			kanaLeft: function(){
 				return this.tested_hiragana.length + this.tested_katakana.length
@@ -138,6 +142,9 @@
 			hideMore: function(){
 				this.oView_anthor.classList.add('hide');
 				this.oVowel.classList.add('hide');
+			},
+			back: function(){
+				location.href = "index.htm"
 			}
 		};
 

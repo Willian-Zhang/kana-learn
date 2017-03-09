@@ -40,6 +40,8 @@
 	.btn-change{display:block;width: 5.76rem;height:1.26rem;margin: 0 auto;padding:0;font:bold .4rem 'arial';color:#fff;border-radius: 3px;background:#33AC8E;}
 	.dki{background: #b98a75}
 	.save{background: red}
+	.back{background: #1e1e1e}
+	.btn-change:disabled{background: gray}
 	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
 	</style>
 </head>
@@ -53,8 +55,9 @@
 		<button class="btn btn-change change">Next</button>
 		<button class="btn btn-change dki">Don't know it</button>
 		<button class="btn btn-change save hide">Save</button>
+		<button class="btn btn-change back">back</button>
 	</div>
-	<p class="footer">Powered by BevisZheng, WillianZ</p>
+	<p class="footer">Powered by WillianZ, BevisZheng</p>
 	<script type="text/javascript">
 	(function(){
 		var page = {
@@ -78,25 +81,24 @@
 				this.oBtn_change = $('.change');
 				this.oBtn_dki = $('.dki');
 				this.oBtn_save = $('.save');
+				this.oBtn_back = $('.back');
 
 				this.initEvent();
 				this.renderView();
 			},
 			initEvent: function(){
-				
 				if(isIOS){
 					this.oView.addEventListener('touchstart',this.showMore.bind(this),false);
 					this.oView.addEventListener('touchend',this.hideMore.bind(this),false);
-					this.oBtn_change.addEventListener('touchend',this.renderView.bind(this),false);
-					this.oBtn_dki.addEventListener('touchend',this.dontknowit.bind(this),false);
-					this.oBtn_save.addEventListener('touchend',this.save.bind(this),false);
 				}else{
 					this.oView.addEventListener('click',this.showMore.bind(this),false);
-					this.oBtn_change.addEventListener('click',this.renderView.bind(this),false);
-					this.oBtn_dki.addEventListener('click',this.dontknowit.bind(this),false);
-					this.oBtn_save.addEventListener('click',this.save.bind(this),false);
 				} 
-				
+
+				event = isIOS ? 'touchend' : 'click';
+				this.oBtn_change.addEventListener(event,this.renderView.bind(this),false);
+				this.oBtn_dki.addEventListener(event,this.dontknowit.bind(this),false);
+				this.oBtn_save.addEventListener(event,this.save.bind(this),false);
+				this.oBtn_back.addEventListener(event,this.back.bind(this),false);
 			},
 			kanaLeft: function(){
 				return this.tested_hiragana.length + this.tested_katakana.length
@@ -163,6 +165,12 @@
 
 				this.oBtn_save.textContent = "Saved.";
 				this.oBtn_save.disabled = true;	
+			},
+			back: function(){
+				var result = window.confirm("Are you sure to abort test?");
+				if(result){
+					location.href = "index.htm"
+				}
 			}
 		};
 
