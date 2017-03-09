@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Kana</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<script type="text/javascript">
+    var isIOS = navigator.userAgent.match(/iphone|ipod|ipad/gi);
+    (function(doc, win){
+        var docEl = doc.documentElement, //Android不支持修改initial-scale
+            dpr = isIOS? Math.min(win.devicePixelRatio, 3) : 1,
+            scale = 1 / dpr,
+            resizeEvt = 'orientationchange' in win ? 'orientationchange' : 'resize';
+        docEl.dataset.dpr = dpr;
+        var metaEl = doc.createElement('meta');
+        metaEl.name = 'viewport';
+        metaEl.content = 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ", user-scalable=no";
+        docEl.firstElementChild.appendChild(metaEl);
+        var recalc = function(){
+            var width = docEl.clientWidth;
+            docEl.style.fontSize = 100 * (width / 640) + 'px';
+        };
+        recalc();
+        win.addEventListener(resizeEvt, recalc, false);
+    })(document, window);
+    </script>
+	<style type="text/css">
+	html,body,p{margin:0;padding:0;}
+	html{-webkit-text-size-adjust:none;font-family: 'Microsoft YaHei';}
+	body{background-color: #F4F9F8;-webkit-user-select:none;}
+	.hide{display: none !important;}
+	.content{width:100%;box-sizing:border-box;}
+	.view{position: relative;margin: .48rem auto .19rem auto;width: 5.76rem;height: 5.76rem;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-tap-highlight-color:rgba(255,0,0,0);background-color: #E6EAE7;color:#33AC8E;font-family: "ヒラギノ角ゴ Pro W3", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif}
+	.view-main,.view-anthor,.view-vowel{position: absolute;}
+	.view-main{top: 50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);font-size: 0.05rem;}
+	.view-anthor,.view-vowel{width: 1.92rem;height: 1.92rem;line-height: 1.92rem;text-align: center;font-size: 0.5rem;}
+	.view-anthor{left:0;bottom:0;}
+	.view-vowel{right:0;bottom:0;}
+    .view-title  {padding:0.1rem 0 0 0.2rem ;left:0;font-size: 0.2rem;font-style: bold;}
+    .view-content{padding:0 0 0 0.2rem ;left:0;font-size: 0.15rem;color: black;}
+	.btn{border:0;}
+	.btn-change{display:block;width: 5.76rem;height:1.26rem;margin: 0 auto;padding:0;font:bold .4rem 'arial';color:#fff;border-radius: 3px;background:#33AC8E;}
+	.back{background: #1e1e1e}
+	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
+	</style>
+</head>
+<body>
+	<div class="content">
+		<div class="view">
+			<div class="view-title">Bevis Zheng</div>
+            <div class="view-content">
+                <ul>
+                    <li>Initial Version: Practice</li>
+                    <li>144 Kanas</li>
+                    <li>User Interface</li>
+                </ul>
+            </div>
+            <div class="view-title">Willian Zhang</div>
+            <div class="view-content">
+                <ul>
+                    <li>Algorithm for test and review</li>
+                    <li>Index and Credit page</li>
+                    <li>Minor Optimizations</li>
+                </ul>
+            </div>
+		</div>
+		<button class="btn btn-change back">back</button>
+	</div>
+	<p class="footer">Powered by WillianZ, BevisZheng</p>
+	<script type="text/javascript">
+	(function(){
+		var page = {
+			init: function(){
+				this.oView = $('.view');
+				this.oView_main = $('.view-main');
+				this.oBtn_back = $('.back');
+				this.initEvent();
+			},
+			initEvent: function(){
+				event = isIOS ? 'touchend' : 'click';
+				this.oBtn_back.addEventListener(event,this.back.bind(this),false);
+			},
+			back: function(){
+				location.href = "index.htm"
+			}
+		};
+
+		page.init();
+
+		function $(s){
+			return document.querySelector(s);
+		}
+	})(window);
+	</script>
+</body>
+</html>

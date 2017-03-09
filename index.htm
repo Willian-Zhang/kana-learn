@@ -38,8 +38,9 @@
 	.view-vowel{right:0;bottom:0;}
 	.btn{border:0;}
 	.btn-change{display:block;width: 5.76rem;height:1.26rem;margin: 0 auto;padding:0;font:bold .4rem 'arial';color:#fff;border-radius: 3px;background:#33AC8E;}
-	.test{background: #b98a75}
-	.reset{background: red}
+	.test{background: #679ad1;}
+	.reset{background: red;}
+	.credit{background: #b98a75;}
 	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
 	</style>
 </head>
@@ -52,6 +53,7 @@
 		<button class="btn btn-change test">Test</button>
 		<button class="btn btn-change review">Review</button>
 		<button class="btn btn-change reset">Reset</button>
+		<button class="btn btn-change credit">Credit</button>
 	</div>
 	<p class="footer">Powered by WillianZ, BevisZheng</p>
 	<script type="text/javascript">
@@ -75,6 +77,8 @@
 				this.btn_test = $('.test');
 				this.btn_review = $('.review');
 				this.btn_reset = $('.reset');
+				this.oBtn_credit = $('.credit');
+				
 				this.initEvent();
 				this.renderView();
 			},
@@ -83,12 +87,16 @@
 				this.btn_test.addEventListener(event,this.test.bind(this),false);
 				this.btn_review.addEventListener(event,this.review.bind(this),false);
 				this.btn_reset.addEventListener(event,this.reset.bind(this),false);
+				this.oBtn_credit.addEventListener(event,this.credit.bind(this),false);
 			},
 			test: function(){
 				location.href = "test.htm"
 			},
 			review: function(){
 				location.href = "review.htm"
+			},
+			credit: function(){
+				location.href = "credit.htm"
 			},
 			reset: function(){
 				localStorage.removeItem('kana_test_result')
