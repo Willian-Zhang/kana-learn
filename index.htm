@@ -56,6 +56,7 @@
 		<button class="btn btn-change credit">Credit</button>
 	</div>
 	<p class="footer">Powered by WillianZ, BevisZheng</p>
+	<p class="footer">Version: 2.1</p>
 	<script type="text/javascript">
 	(function(){
 		var page = {
@@ -99,7 +100,8 @@
 				location.href = "credit.htm"
 			},
 			reset: function(){
-				localStorage.removeItem('kana_test_result')
+				localStorage.removeItem('kana_test_result');
+				renderView();
 			},
 			kanaDontKnow: function(){
 				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
