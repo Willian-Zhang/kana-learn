@@ -30,7 +30,7 @@
 	body{background-color: #F4F9F8;-webkit-user-select:none;}
 	.hide{display: none !important;}
 	.content{width:100%;box-sizing:border-box;}
-	.view{position: relative;margin: .48rem auto .19rem auto;width: 5.76rem;height: 4.76rem;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-tap-highlight-color:rgba(255,0,0,0);background-color: #E6EAE7;color:#33AC8E;font-family: "ヒラギノ角ゴ Pro W3", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif}
+	.view{position: relative;margin: .48rem auto .19rem auto;width: 5.76rem;height: 7rem;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-tap-highlight-color:rgba(255,0,0,0);background-color: #E6EAE7;color:#33AC8E;font-family: "ヒラギノ角ゴ Pro W3", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif}
 	.view-main,.view-anthor,.view-vowel{position: absolute;}
 	.view-main{top: 50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);font-size: 2.6rem;}
 	.view-anthor,.view-vowel{width: 1.92rem;height: 1.92rem;line-height: 1.92rem;text-align: center;font-size: 1rem;}
@@ -57,7 +57,7 @@
 		</div>
 		<button class="btn btn-change back">back</button>
 	</div>
-	<p class="footer">Powered by BevisZheng, WillianZ V: 2.4</p>
+	<p class="footer">Powered by BevisZheng, WillianZ V: 1.1</p>
 	<script type="text/javascript">
 	(function(){
 		var page = {
@@ -91,12 +91,12 @@
                 var hiragana = this.hiragana;
                 var katakana = this.katakana;
 
-                this.oHiragana.content = 
+                this.oHiragana.innerHTML = 
 				    this.dontKnows.hiragana
                       .map(function(i){return hiragana[i];})
                      .reduce(function(a, b) { return a + b;}, "");
 
-                this.oKatakana.content = 
+                this.oKatakana.innerHTML = 
 				    this.dontKnows.katakana
                       .map(function(i){return katakana[i];})
                      .reduce(function(a, b) { return a + b;}, "");
