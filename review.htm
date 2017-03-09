@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>Kana Test</title>
+	<title>Kana Review</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 	<script type="text/javascript">
     var isIOS = navigator.userAgent.match(/iphone|ipod|ipad/gi);
@@ -38,8 +38,6 @@
 	.view-vowel{right:0;bottom:0;}
 	.btn{border:0;}
 	.btn-change{display:block;width: 5.76rem;height:1.26rem;margin: 0 auto;padding:0;font:bold .4rem 'arial';color:#fff;border-radius: 3px;background:#33AC8E;}
-	.dki{background: #b98a75}
-	.save{background: red}
 	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
 	</style>
 </head>
@@ -50,9 +48,7 @@
 			<div class="view-anthor hide"></div>
 			<div class="view-vowel hide"></div>
 		</div>
-		<button class="btn btn-change change">Next</button>
-		<button class="btn btn-change dki">Don't know it</button>
-		<button class="btn btn-change save hide">Save</button>
+		<button class="btn btn-change">Next</button>
 	</div>
 	<p class="footer">Powered by BevisZheng, WillianZ</p>
 	<script type="text/javascript">
@@ -62,12 +58,15 @@
 				this.hiragana = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん", "が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ"];
 				this.katakana = ["ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ず", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ぺ", "ポ"];
 				this.vowel = ['a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so','ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho','ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','o','n', "ga", "gi", "gu", "ge", "go", "za", "ji", "zu", "ze", "zo", "da", "ji", "zu", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po"];
-				this.tested_hiragana = this.hiragana.map((_,i)=>i);
-				this.tested_katakana = this.katakana.map((_,i)=>i);
-				this.dontKnows = {
-					hiragana: [],
-					katakana: []
-				};
+				if(localStorage['kana_test_result']){
+					this.dontKnows = JSON.parse(localStorage['kana_test_result']);
+					this.tested_hiragana = this.dontKnows.hiragana;
+					this.tested_katakana = this.dontKnows.katakana;
+				}else{
+					this.tested_hiragana = this.hiragana.map((_,i)=>i);
+					this.tested_katakana = this.katakana.map((_,i)=>i);
+				}
+				
 
 				this.now = -1;
 
@@ -75,26 +74,19 @@
 				this.oView_main = $('.view-main');
 				this.oView_anthor = $('.view-anthor');
 				this.oVowel = $('.view-vowel');
-				this.oBtn_change = $('.change');
-				this.oBtn_dki = $('.dki');
-				this.oBtn_save = $('.save');
+				this.oBtn_change = $('.btn-change');
 
 				this.initEvent();
 				this.renderView();
 			},
 			initEvent: function(){
-				
 				if(isIOS){
 					this.oView.addEventListener('touchstart',this.showMore.bind(this),false);
 					this.oView.addEventListener('touchend',this.hideMore.bind(this),false);
 					this.oBtn_change.addEventListener('touchend',this.renderView.bind(this),false);
-					this.oBtn_dki.addEventListener('touchend',this.dontknowit.bind(this),false);
-					this.oBtn_save.addEventListener('touchend',this.save.bind(this),false);
 				}else{
 					this.oView.addEventListener('click',this.showMore.bind(this),false);
 					this.oBtn_change.addEventListener('click',this.renderView.bind(this),false);
-					this.oBtn_dki.addEventListener('click',this.dontknowit.bind(this),false);
-					this.oBtn_save.addEventListener('click',this.save.bind(this),false);
 				} 
 				
 			},
@@ -111,9 +103,6 @@
 				var nRandom = Math.floor(Math.random() * this[kanaSet].length);
 				return nRandom + '';
 			},
-			removeTested: function(kanaSet, index){
-				this[kanaSet].splice(index, 1);
-			},
 			renderView: function(){
 				var portion = this.tested_hiragana.length / this.tested_katakana.length
 				var dice = Math.random()*2;
@@ -129,17 +118,9 @@
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
-				this.removeTested("tested_"+key)
 				this.testing = {key: key, i: index};
 
 				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
-			},
-			dontknowit:function(){
-				var testing = this.testing;
-				this.dontKnows[testing.key].push(testing.i);
-				this.oBtn_dki.textContent = "Don't know it ("+this.kanaDontKnow()+")";	
-
-				this.renderView();
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
@@ -157,12 +138,6 @@
 			hideMore: function(){
 				this.oView_anthor.classList.add('hide');
 				this.oVowel.classList.add('hide');
-			},
-			save: function(){
-				window.localStorage['kana_test_result'] = JSON.stringify(this.dontKnows);
-
-				this.oBtn_save.textContent = "Saved.";
-				this.oBtn_save.disabled = true;	
 			}
 		};
 
