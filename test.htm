@@ -60,13 +60,18 @@
 	<p class="footer">Powered by WillianZ, BevisZheng V: 2.4</p>
 	<script type="text/javascript">
 	(function(){
+		Array.prototype.popRandom = function(){
+			return this.splice(Math.floor(Math.random()*this.length),1);
+		};
 		var page = {
 			init: function(){
 				this.hiragana = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん", "が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ"];
 				this.katakana = ["ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヲ", "ン", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ず", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ", "パ", "ピ", "プ", "ぺ", "ポ"];
 				this.vowel = ['a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so','ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho','ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','o','n', "ga", "gi", "gu", "ge", "go", "za", "ji", "zu", "ze", "zo", "da", "ji", "zu", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po"];
-				this.tested_hiragana = this.hiragana.map(function(_,i){return i;});
-				this.tested_katakana = this.katakana.map(function(_,i){return i;});
+				this.tested = {
+					hiragana : this.hiragana.map(function(_,i){return i;}),
+					katakana : this.katakana.map(function(_,i){return i;})
+				};
 				this.dontKnows = {
 					hiragana: [],
 					katakana: []
@@ -81,8 +86,6 @@
 				this.oBtn_change = $('.change');
 				this.oBtn_dki = $('.dki');
 				this.oBtn_save = $('.save');
-				this.oBtn_back = $('.back');
-				
 
 				this.initEvent();
 				this.renderView();
@@ -100,40 +103,29 @@
 				this.oBtn_dki.addEventListener(event,this.dontknowit.bind(this),false);
 				this.oBtn_save.addEventListener(event,this.save.bind(this),false);
 				this.oBtn_back.addEventListener(event,this.back.bind(this),false);
-				
 			},
 			kanaLeft: function(){
-				return this.tested_hiragana.length + this.tested_katakana.length
+				return this.tested.hiragana.length + this.tested.katakana.length
 			},
 			kanaDontKnow: function(){
 				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
 			},
-			randomIndex: function(kanaSet){
-				if(this.kanaLeft() == 0){
-					return -1;
-				}
-				var nRandom = this[kanaSet][Math.floor(Math.random() * this[kanaSet].length)];
-				return nRandom + '';
-			},
-			removeTested: function(kanaSet, index){
-				this[kanaSet].splice(index, 1);
-			},
 			renderView: function(){
-				var portion = this.tested_hiragana.length / this.tested_katakana.length
+				var portion = this.tested.hiragana.length / this.tested.katakana.length
 				var dice = Math.random()*2;
 				var key =  dice < portion ? 'hiragana' : 'katakana';
 				var anthor = key == "hiragana" ? 'katakana' : 'hiragana';
-				var index = this.randomIndex("tested_"+key);
-				if(index < 0){
+				var extracted = this.tested[key].popRandom();
+				if(extracted.length == 0){
 					this.renderNothing();
 					return;
 				}
+				var index = extracted[0]
 
 				this.hideMore();
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
-				this.removeTested("tested_"+key)
 				this.testing = {key: key, i: index};
 
 				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
