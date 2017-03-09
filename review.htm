@@ -66,8 +66,8 @@
 					this.tested_hiragana = this.dontKnows.hiragana;
 					this.tested_katakana = this.dontKnows.katakana;
 				}else{
-					this.tested_hiragana = this.hiragana.map((_,i)=>i);
-					this.tested_katakana = this.katakana.map((_,i)=>i);
+					this.tested_hiragana = this.hiragana.map(function(_,i){return i;});
+					this.tested_katakana = this.katakana.map(function(_,i){return i;});
 				}
 				
 
