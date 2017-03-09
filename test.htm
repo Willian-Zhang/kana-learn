@@ -112,7 +112,7 @@
 				if(this.kanaLeft() == 0){
 					return -1;
 				}
-				var nRandom = Math.floor(Math.random() * this[kanaSet].length);
+				var nRandom = this[kanaSet][Math.floor(Math.random() * this[kanaSet].length)];
 				return nRandom + '';
 			},
 			removeTested: function(kanaSet, index){
