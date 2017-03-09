@@ -71,7 +71,7 @@
 					hiragana: [],
 					katakana: []
 				};
-
+				this.started = false;
 				this.now = -1;
 
 				this.oView = $('.view');
@@ -139,6 +139,7 @@
 				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
 			},
 			dontknowit:function(){
+				this.started = true;
 				var testing = this.testing;
 				this.dontKnows[testing.key].push(testing.i);
 				this.oBtn_dki.textContent = "Don't know it ("+this.kanaDontKnow()+")";	
@@ -164,11 +165,15 @@
 			},
 			save: function(){
 				window.localStorage['kana_test_result'] = JSON.stringify(this.dontKnows);
-
+				this.saved = true;
 				this.oBtn_save.textContent = "Saved.";
 				this.oBtn_save.disabled = true;	
 			},
 			back: function(){
+				if(this.saved || !this.started ){
+					location.href = "index.htm"
+					return
+				}
 				var result = window.confirm("Are you sure to abort test?");
 				if(result){
 					location.href = "index.htm"
