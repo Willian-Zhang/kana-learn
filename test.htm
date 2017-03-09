@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>五十音练习</title>
+	<title>Kana</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 	<script type="text/javascript">
     var isIOS = navigator.userAgent.match(/iphone|ipod|ipad/gi);
@@ -28,7 +28,7 @@
 	html,body,p{margin:0;padding:0;}
 	html{-webkit-text-size-adjust:none;font-family: 'Microsoft YaHei';}
 	body{background-color: #F4F9F8;-webkit-user-select:none;}
-	.hide{display: none;}
+	.hide{display: none !important;}
 	.content{width:100%;box-sizing:border-box;}
 	.view{position: relative;margin: .48rem auto .19rem auto;width: 5.76rem;height: 5.76rem;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-tap-highlight-color:rgba(255,0,0,0);background-color: #E6EAE7;color:#33AC8E;font-family: "ヒラギノ角ゴ Pro W3", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif}
 	.view-main,.view-anthor,.view-vowel{position: absolute;}
@@ -38,6 +38,8 @@
 	.view-vowel{right:0;bottom:0;}
 	.btn{border:0;}
 	.btn-change{display:block;width: 5.76rem;height:1.26rem;margin: 0 auto;padding:0;font:bold .4rem 'arial';color:#fff;border-radius: 3px;background:#33AC8E;}
+	.dki{background: #b98a75}
+	.save{background: red}
 	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
 	</style>
 </head>
@@ -49,8 +51,10 @@
 			<div class="view-vowel hide"></div>
 		</div>
 		<button class="btn btn-change">Next</button>
+		<button class="btn btn-change dki">Don't know it</button>
+		<button class="btn btn-change save hide">Save</button>
 	</div>
-	<p class="footer">Powered by BevisZheng</p>
+	<p class="footer">Powered by BevisZheng, WillianZ</p>
 	<script type="text/javascript">
 	(function(){
 		var page = {
@@ -60,6 +64,10 @@
 				this.vowel = ['a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so','ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho','ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','o','n', "ga", "gi", "gu", "ge", "go", "za", "ji", "zu", "ze", "zo", "da", "ji", "zu", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po"];
 				this.tested_hiragana = this.hiragana.map((_,i)=>i);
 				this.tested_katakana = this.katakana.map((_,i)=>i);
+				this.dontKnows = {
+					hiragana: [],
+					katakana: []
+				};
 
 				this.now = -1;
 
@@ -68,6 +76,8 @@
 				this.oView_anthor = $('.view-anthor');
 				this.oVowel = $('.view-vowel');
 				this.oBtn_change = $('.btn-change');
+				this.oBtn_dki = $('.dki');
+				this.oBtn_save = $('.save');
 
 				this.initEvent();
 				this.renderView();
@@ -78,14 +88,21 @@
 					this.oView.addEventListener('touchstart',this.showMore.bind(this),false);
 					this.oView.addEventListener('touchend',this.hideMore.bind(this),false);
 					this.oBtn_change.addEventListener('touchend',this.renderView.bind(this),false);
+					this.oBtn_dki.addEventListener('touchend',this.dontknowit.bind(this),false);
+					this.oBtn_save.addEventListener('touchend',this.save.bind(this),false);
 				}else{
 					this.oView.addEventListener('click',this.showMore.bind(this),false);
 					this.oBtn_change.addEventListener('click',this.renderView.bind(this),false);
+					this.oBtn_dki.addEventListener('click',this.dontknowit.bind(this),false);
+					this.oBtn_save.addEventListener('click',this.save.bind(this),false);
 				} 
 				
 			},
 			kanaLeft: function(){
 				return this.tested_hiragana.length + this.tested_katakana.length
+			},
+			kanaDontKnow: function(){
+				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
 			},
 			randomIndex: function(kanaSet){
 				if(this.kanaLeft() == 0){
@@ -112,17 +129,26 @@
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
 				this.oVowel.innerHTML = this.vowel[index];
-
 				this.removeTested("tested_"+key)
+				this.testing = {key: key, i: index};
 
 				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
+			},
+			dontknowit:function(){
+				var testing = this.testing;
+				this.dontKnows[testing.key].push(testing.i);
+				this.oBtn_dki.textContent = "Don't know it ("+this.kanaDontKnow()+")";	
+
+				this.renderView();
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
 				this.oView_anthor.innerHTML = "";
 				this.oVowel.innerHTML = "";
 				this.oBtn_change.innerHTML = "Nothing Left";
-				this.oBtn_change.disable();
+				this.oBtn_save.classList.remove('hide');
+				this.oBtn_change.disabled = true;
+				this.oBtn_dki.disabled = true;
 			},
 			showMore: function(){
 				this.oView_anthor.classList.remove('hide');
@@ -131,6 +157,12 @@
 			hideMore: function(){
 				this.oView_anthor.classList.add('hide');
 				this.oVowel.classList.add('hide');
+			},
+			save: function(){
+				window.localStorage['kana_test_result'] = JSON.stringify(this.dontKnows);
+
+				this.oBtn_save.textContent = "Saved.";
+				this.oBtn_save.disabled = true;	
 			}
 		};
 
