@@ -100,8 +100,11 @@
 				location.href = "credit.htm"
 			},
 			reset: function(){
-				localStorage.removeItem('kana_test_result');
-				renderView();
+				var result = window.confirm('Are you sure to reset test result?');
+				if(result){
+					localStorage.removeItem('kana_test_result');
+					this.renderView();
+				}
 			},
 			kanaDontKnow: function(){
 				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
