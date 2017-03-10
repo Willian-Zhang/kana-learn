@@ -63,11 +63,11 @@
 				this.vowel = ['a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so','ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho','ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','o','n', "ga", "gi", "gu", "ge", "go", "za", "ji", "zu", "ze", "zo", "da", "ji", "zu", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po"];
 				if(localStorage['kana_test_result']){
 					this.dontKnows = JSON.parse(localStorage['kana_test_result']);
-					this.tested_hiragana = this.dontKnows.hiragana;
-					this.tested_katakana = this.dontKnows.katakana;
 				}else{
-					this.tested_hiragana = this.hiragana.map(function(_,i){return i;});
-					this.tested_katakana = this.katakana.map(function(_,i){return i;});
+					this.dontKnows = {
+						hiragana: this.hiragana.map(function(_,i){return i;}),
+						katakana: this.katakana.map(function(_,i){return i;})
+					};
 				}
 				
 
@@ -94,25 +94,22 @@
 				this.oBtn_change.addEventListener(event,this.renderView.bind(this),false);
 				this.oBtn_back.addEventListener(event,this.back.bind(this),false);
 			},
-			kanaLeft: function(){
-				return this.tested_hiragana.length + this.tested_katakana.length
-			},
 			kanaDontKnow: function(){
 				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
 			},
 			randomIndex: function(kanaSet){
-				if(this.kanaLeft() == 0){
+				if(this.kanaDontKnow() == 0){
 					return -1;
 				}
-				var nRandom = Math.floor(Math.random() * this[kanaSet].length);
-				return nRandom + '';
+				var nRandom = Math.floor(Math.random() * this.dontKnows[kanaSet].length);
+				return this.dontKnows[kanaSet][nRandom];
 			},
 			renderView: function(){
-				var portion = this.tested_hiragana.length / this.tested_katakana.length
+				var portion = this.dontKnows.hiragana.length / this.dontKnows.katakana.length
 				var dice = Math.random()*2;
 				var key =  dice < portion ? 'hiragana' : 'katakana';
 				var anthor = key == "hiragana" ? 'katakana' : 'hiragana';
-				var index = this.randomIndex("tested_"+key);
+				var index = this.randomIndex(key);
 				if(index < 0){
 					this.renderNothing();
 					return;
@@ -121,19 +118,14 @@
 				this.hideMore();
 				this.oView_main.innerHTML = this[key][index];
 				this.oView_anthor.innerHTML = this[anthor][index];
-				this.oVowel.innerHTML = this.vowel[index];
-				this.testing = {key: key, i: index};
-
-				this.oBtn_change.textContent = "Next ("+this.kanaLeft()+")";			
+				this.oVowel.innerHTML = this.vowel[index];	
 			},
 			renderNothing: function(){
 				this.oView_main.innerHTML = "∅";
 				this.oView_anthor.innerHTML = "";
 				this.oVowel.innerHTML = "";
 				this.oBtn_change.innerHTML = "Nothing Left";
-				this.oBtn_save.classList.remove('hide');
 				this.oBtn_change.disabled = true;
-				this.oBtn_dki.disabled = true;
 			},
 			showMore: function(){
 				this.oView_anthor.classList.remove('hide');
