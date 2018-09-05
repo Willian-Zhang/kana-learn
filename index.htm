@@ -41,6 +41,7 @@
 	.test{background: #679ad1;}
 	.reset{background: red;}
 	.credit{background: #b98a75;}
+	.more{background: gray;}
 	.footer{padding-top: .96rem;text-align: center;font-size:.28rem;color: #b8c4cc;}
 	</style>
 </head>
@@ -52,10 +53,9 @@
 		</div>
 		<button class="btn btn-change test">Test</button>
 		<button class="btn btn-change review">Review</button>
-		<button class="btn btn-change reset">Reset</button>
-		<button class="btn btn-change credit">Credit</button>
+		<button class="btn btn-change more">More</button>
 	</div>
-	<p class="footer">Powered by WillianZ, BevisZheng. V: 2.4</p>
+	<p class="footer">Powered by WillianZ, BevisZheng. V: 2.5</p>
 	<script type="text/javascript">
 	(function(){
 		var page = {
@@ -76,8 +76,7 @@
 
 				this.btn_test = $('.test');
 				this.btn_review = $('.review');
-				this.btn_reset = $('.reset');
-				this.oBtn_credit = $('.credit');
+				this.btn_more = $('.more');
 
 				this.initEvent();
 				this.renderView();
@@ -86,8 +85,7 @@
 				event = isIOS ? 'touchend' : 'click';
 				this.btn_test.addEventListener(event,this.test.bind(this),false);
 				this.btn_review.addEventListener(event,this.review.bind(this),false);
-				this.btn_reset.addEventListener(event,this.reset.bind(this),false);
-				this.oBtn_credit.addEventListener(event,this.credit.bind(this),false);
+				this.btn_more.addEventListener(event,this.more.bind(this),false);
 			},
 			test: function(){
 				location.href = "test.htm"
@@ -95,15 +93,8 @@
 			review: function(){
 				location.href = "review.htm"
 			},
-			credit: function(){
-				location.href = "credit.htm"
-			},
-			reset: function(){
-				var result = window.confirm('Are you sure to reset test result?');
-				if(result){
-					localStorage.removeItem('kana_test_result');
-					this.renderView();
-				}
+			more: function(){
+				location.href = "more.htm"
 			},
 			kanaDontKnow: function(){
 				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
