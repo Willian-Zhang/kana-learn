@@ -65,11 +65,13 @@
 				
 				if(localStorage['kana_test_result']){
 					this.dontKnows = JSON.parse(localStorage['kana_test_result']);
+					this.testedBefore = true;
 				}else{
 					this.dontKnows = {
 						hiragana: [],
 						katakana: []
 					};
+					this.testedBefore = false;
 				}
 
 				this.oView_main = $('.view-main');
@@ -100,7 +102,19 @@
 				return this.dontKnows.hiragana.length + this.dontKnows.katakana.length
 			},
 			renderView: function(){
-				this.oView_main.innerHTML = this.kanaDontKnow();	
+				if(this.testedBefore == true){
+					var dk = this.kanaDontKnow();
+					if(dk > 0){
+						this.oView_main.innerHTML = dk;
+					}else{
+						this.oView_main.innerHTML = dk;
+					}
+					
+				}else{
+					$('.view').classList.add('hide');
+					this.btn_test.innerHTML = "Test Now";
+					this.btn_review.innerHTML = "Review All";
+				}
 			},
 		};
 
